@@ -6,13 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public class Addition {
-         @JsonProperty("additional_info")
-         private String additionalInfo;
-         @JsonProperty("additional_number")
-         private int additionalNumber;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Addition {
+    @JsonProperty("additional_info")
+    private String additionalInfo;
+
+    @JsonProperty("additional_number")
+    private int additionalNumber;
 }
 

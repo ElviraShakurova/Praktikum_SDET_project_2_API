@@ -29,10 +29,15 @@ import static io.restassured.RestAssured.given;
 
     public static final String CONTENT_TYPE = "application/json; charset=UTF-8";
 
+        public static void setBaseUri() {
+            String baseUri = Config.getBaseUri();
+            RestAssured.baseURI = baseUri;
+        }
+
     @Step("Ввод данных при создании сущности")
     public static EntityRequest getCreate() {
-        String baseUri = Config.getBaseUri();
-        RestAssured.baseURI = baseUri;
+        setBaseUri();
+
         EntityRequest request = new EntityRequest();
         Addition addition = new Addition("Дополнительные сведения", 123);
         request.setAddition(addition);
@@ -45,6 +50,8 @@ import static io.restassured.RestAssured.given;
 
     @Step("Изменение сущности")
     public static ValidatableResponse update(String entityId) {
+            setBaseUri();
+
         File json = new File(JSON_FILE_PATH);
          return given()
                 .contentType(CONTENT_TYPE)
@@ -57,6 +64,8 @@ import static io.restassured.RestAssured.given;
 
     @Step("Получение сущности по id")
     public ValidatableResponse getEntityById(String entityId) {
+        setBaseUri();
+
        return RestAssured.given()
                 .queryParam("id", entityId)
                 .get(GET_ENDPOINT + "/" + entityId)
@@ -67,6 +76,8 @@ import static io.restassured.RestAssured.given;
 
     @Step("Создание сущности")
     public static ValidatableResponse getResponseCreate(EntityRequest request) {
+        setBaseUri();
+
         return given()
                 .contentType(CONTENT_TYPE)
                 .body(request)
@@ -77,6 +88,8 @@ import static io.restassured.RestAssured.given;
 
     @Step("Удаление сущности")
     public ValidatableResponse delete(String entityId) {
+        setBaseUri();
+
         return RestAssured.given()
                 .when()
                 .delete(DELETE_ENDPOINT + "/" + entityId)

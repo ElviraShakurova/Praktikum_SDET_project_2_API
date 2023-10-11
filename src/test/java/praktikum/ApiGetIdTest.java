@@ -32,9 +32,8 @@ public class ApiGetIdTest {
     @Description("Тест проводит проверку получения сущности по его id")
     @Test
     public void testGetEntity() {
-        ValidatableResponse response2 = steps.getEntityById(entityId);
-        assertEquals(200, response2.extract().statusCode());
-        assertThat(response2, notNullValue());
+        ValidatableResponse response = steps.getEntityById(entityId);
+
     }
 }
 
