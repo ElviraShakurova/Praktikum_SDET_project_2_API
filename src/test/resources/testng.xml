@@ -1,0 +1,28 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Parallel Test Suite" parallel="tests" thread-count="3">
+    <test name="ApiCreateTest">
+        <classes>
+            <class name="praktikum.ApiCreateTest"/>
+        </classes>
+    </test>
+    <test name="ApiDeleteTest">
+        <classes>
+            <class name="praktikum.ApiDeleteTest"/>
+        </classes>
+    </test>
+    <test name="ApiGetAllTest">
+        <classes>
+            <class name="praktikum.ApiGetAllTest"/>
+        </classes>
+    </test>
+    <test name="ApiGetIdTest">
+        <classes>
+            <class name="praktikum.ApiGetIdTest"/>
+        </classes>
+    </test>
+    <test name="ApiPatchTest">
+        <classes>
+            <class name="praktikum.ApiPatchTest"/>
+        </classes>
+    </test>
+</suite>
