@@ -1,32 +1,47 @@
 package praktikum;
 
 import io.qameta.allure.Description;
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
-import org.hamcrest.MatcherAssert;
+import io.restassured.response.ValidatableResponse;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
-import praktikum.model.request.RequestCreate;
-import praktikum.model.response.ResponseCreate;
+import org.testng.annotations.Test;
+import praktikum.model.EntityListResponse;
+import praktikum.model.EntityRequest;
+import praktikum.model.EntityResponse;
 import praktikum.steps.Steps;
+
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ApiGetAllTest {
     Steps steps = new Steps();
+    ValidatableResponse response;
 
     @Before
-    public void setUp() {
-        RestAssured.baseURI = steps.BASE_URI;
+    public void createEntity(){
+        EntityRequest request = steps.getCreate();
+        response = steps.getResponseCreate(request);
+    }
+
+    @After
+    public void deleteEntity(){
+        String entityId = response.extract().body().asString();
+        steps.delete(entityId);
     }
 
     @Description("Тест проводит проверку получения списка сущности")
     @Test
     public void testGetAll(){
-        RequestCreate request = steps.getCreate();
-        Response response = steps.getResponseCreate(request);
-        String entityId = response.getBody().asString();
 
-        ResponseCreate responseCreate = steps.getEntityAll(entityId);
-        MatcherAssert.assertThat(responseCreate, notNullValue());
+        EntityListResponse responseCreate = given()
+                .when()
+                .get(steps.GET_ALL_ENDPOINT)
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(EntityListResponse.class);
+
+        assertThat(responseCreate, notNullValue());
     }
 }

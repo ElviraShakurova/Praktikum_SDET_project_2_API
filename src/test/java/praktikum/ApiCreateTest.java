@@ -1,23 +1,31 @@
 package praktikum;
+
 import io.qameta.allure.Description;
-import io.restassured.response.Response;
-import org.junit.Test;
-import praktikum.model.request.RequestCreate;
+import io.restassured.response.ValidatableResponse;
+import org.junit.Assert;
+import org.testng.annotations.Test;
+import praktikum.model.EntityRequest;
+import praktikum.model.EntityResponse;
 import praktikum.steps.Steps;
 
 public class ApiCreateTest {
-
     Steps steps = new Steps();
 
     @Description("Тест проводит проверку создания сущности")
     @Test
     public void testCreateEntity(){
-        RequestCreate request = steps.getCreate();
+        EntityRequest request = steps.getCreate();
 
-        Response response = steps.getResponseCreate(request);
-        String entityId = response.getBody().asString();
+        ValidatableResponse response = steps.getResponseCreate(request);
+        String entityId = response.extract().body().asString();
 
-        System.out.println(entityId);
+        Assert.assertNotNull("Id сущности не должен быть пустым", entityId);
+        ValidatableResponse responseGet = steps.getEntityById(entityId);
+
+        EntityResponse entityResponse = responseGet.extract().body().as(EntityResponse.class);
+
+        Assert.assertEquals("Проверка заголовка сущности", request.getTitle(), entityResponse.getTitle());
+        Assert.assertEquals("Проверка типа сущности", request.getImportantNumbers(), entityResponse.getImportantNumbers());
     }
 }
 
